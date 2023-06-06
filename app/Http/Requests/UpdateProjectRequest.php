@@ -30,4 +30,12 @@ class UpdateProjectRequest extends FormRequest
         ];
     }
 
+    public function messages()
+    {
+        return [
+            'title.required' => 'Il titolo è obbligatorio',
+            'title.max' => 'Il titolo non deve superare :max carattteri'
+        ];
+    }
+
 }
