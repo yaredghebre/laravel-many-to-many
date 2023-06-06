@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-    <h1>BENVENUTO ADMIN</h1>
+    <div class="wrapper py-3">
+        <h1>Benvenuto {{ Auth::user()->name }}!</h1>
+    </div>
 @endsection

@@ -1,8 +1,12 @@
 @extends('layouts.admin')
 
 @section('content')
-    <h1>Lista dei progetti</h1>
+    @include('partials.session_message')
 
+    <h1>I miei progetti</h1>
+    <div class="text-end">
+        <a href="{{ route('admin.projects.create') }}" class="btn btn-primary">Aggiungi Progetto +</a>
+    </div>
     <table class="table">
         <thead>
             <tr>
@@ -20,10 +24,23 @@
                     <td>{{ $project->title }}</td>
                     <td>{{ $project->slug }}</td>
                     <td>{{ $project->description }}</td>
-                    <td>
+                    <td class="d-flex gap-1">
                         <a href="{{ route('admin.projects.show', $project->slug) }}" class="btn btn-success">
                             <i class="fa-solid fa-eye"></i>
                         </a>
+
+                        <a href="{{ route('admin.projects.edit', $project->slug) }}" class="btn btn-warning">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </a>
+
+                        <form action="{{ route('admin.projects.destroy', $project->slug) }}" 
+                            method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </form>
                     </td>
                 </tr>
             @endforeach
