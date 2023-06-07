@@ -18,6 +18,17 @@
                     </div>
                 @enderror
             </div>
+
+            <div class="mb-3">
+                <label for="type">Tipologia</label>
+                <select class="form-select" id="type" name="type_id">
+                    <option value=""></option>
+                    @foreach ($types as $type)
+                        <option @selected($type->id == old('type_id',$project->type?->id)) value="{{ $type->id }}">{{ $type->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
             <div class="mb-3">
                 <label for="description" class="form-label">Descrizione</label>
                 <textarea class="form-control" id="description" rows="3" name="description">{{ old('description', $project->description) }}</textarea>
