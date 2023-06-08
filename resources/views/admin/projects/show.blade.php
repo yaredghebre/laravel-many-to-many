@@ -11,6 +11,14 @@
                 <h4 class="card-text">Tipologia: Nessuna tipologia</h4>
             @endif
             <p class="card-text">Descrizione: {{ $project->description }}</p>
+
+            <h4 class="card-text">Tecnologie: </h4>
+            @forelse ($project->technologies as $technology)
+                <span>{{ $technology->name }} {{ $loop->last ? '' : ',' }}</span>
+            @empty
+                <span>Tecnologia non specificata</span>
+            @endforelse
+
         </div>
     </div>
 </div>
