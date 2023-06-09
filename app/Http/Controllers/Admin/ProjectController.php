@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
+use App\Models\Technology;
 use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -32,7 +33,8 @@ class ProjectController extends Controller
     public function create()
     {
         $types = Type::all();
-        return view('admin.projects.create', compact('types'));
+        $technologies = Technology::all();
+        return view('admin.projects.create', compact('types', 'technologies'));
     }
 
     /**
@@ -43,12 +45,16 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
+        // Creazione del progetto
         $data = $request->validated();
         $data['slug'] = Str::slug($data['title']); // questo associerà lo slug al titolo
-        // $project = new Project();
-        // $project->fill($data);
-        // $project->save();
         $project = Project::create($data); // altro metodo 
+
+        // Salvataggio dati nella tabella ponte
+        if($request->has('technologies')) {
+            $project->technologies()->attach($request->technologies);
+        }
+
         return redirect()->route('admin.projects.index')->with('message', "{$project->title} è stato aggiunto!");
     }
 
@@ -72,7 +78,8 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         $types = Type::all();
-        return view('admin.projects.edit', compact('project', 'types'));
+        $technologies = Technology::all();
+        return view('admin.projects.edit', compact('project', 'types', 'technologies'));
     }
 
     /**
@@ -84,9 +91,19 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
+
+        // Aggionramento dei dati del progetto
         $data = $request->validated();
         $data['slug'] = Str::slug($data['title']);
         $project->update($data);
+
+        // Aggiornamento del collegamento con le technologies
+        if($request->has('technologies')) {
+            $project->technologies()->sync($request->technologies);
+        } else {
+            $project->technologies()->detach(); // se i campi sono vuoti 
+        }
+
         return redirect()->route('admin.projects.index')->with('message', "{$project->title} è stato modificato con successo!");
     }
 
@@ -98,6 +115,7 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        $project->technologies()->detach(); // anche se cascade è stato impostato, sempre meglio aggiungere il detach()
         $project->delete();
         return redirect()->route('admin.projects.index')->with('message', "{$project->title} è stato cancellato!");
     }
