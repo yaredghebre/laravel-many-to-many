@@ -30,10 +30,10 @@
             </div>
 
             <div class="mb-3">
-                <h5>Seleziona le tech</h5>
+                <h5>Seleziona le tecnologie: </h5>
                 @foreach ($technologies as $technology)
                     <div class="form-check">
-                        <input class="form-check-input" name="technologies[]" type="checkbox" value="{{ $technology->id }}" id="technology-{{ $technology->id }}" @checked($project->technologies->contains($technology))>
+                        <input class="form-check-input" name="technologies[]" type="checkbox" value="{{ $technology->id }}" id="technology-{{ $technology->id }}" @checked(old('technologies') ? in_array($technology->id, old('technologies', [])) : $project->technologies->contains($technology))>
                         <label class="form-check-label" for="technology-{{ $technology->id }}">
                             {{ $technology->name }}
                         </label>
