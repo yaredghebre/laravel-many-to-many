@@ -7,6 +7,20 @@
     <div class="text-end">
         <a href="{{ route('admin.projects.create') }}" class="btn btn-primary">Aggiungi Progetto +</a>
     </div>
+
+    {{-- Filtri --}}
+    <form action="{{ route('admin.projects.index') }}" method="GET" class="mx-2">
+        @csrf
+        <label for="">Tipologia</label>
+        <select name="type_id" id="type">
+            <option value="">All</option>
+            @foreach ($types as $type)
+                <option value="{{ $type->id }}">{{ $type->name }}</option>
+            @endforeach
+        </select>
+        <button type="submit">Filtra</button>
+    </form>
+
     <table class="table">
         <thead>
             <tr>
@@ -50,5 +64,7 @@
         </tbody>
     </table>
 
+    {{-- Pagination --}} 
+    {{ $projects->links() }} 
     @include('partials.modal_delete')
 @endsection
