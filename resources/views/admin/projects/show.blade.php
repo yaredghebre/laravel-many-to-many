@@ -6,6 +6,18 @@
             <div class="card-body">
                 <h2 class="card-title">Titolo: {{ $project->title }}</h2>
 
+                {{-- Project Image --}}
+
+                <div class="project-image my-3">
+                    @if ($project->image)
+                        <img width="300" src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}">
+                    @else
+                        <div class="p-5 bg-secondary text-white">
+                            Image not available
+                        </div>
+                    @endif
+                </div>
+
                 @if ($project->type)
                     <h4 class="card-text">Tipologia: </h4>
                     <ul>

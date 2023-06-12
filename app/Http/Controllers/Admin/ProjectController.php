@@ -9,6 +9,7 @@ use App\Models\Project;
 use App\Models\Technology;
 use App\Models\Type;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ProjectController extends Controller
@@ -52,10 +53,19 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
+        // dd($request->all());
         // Creazione del progetto
         $data = $request->validated();
         $data['slug'] = Str::slug($data['title']); // questo associerà lo slug al titolo
-        $project = Project::create($data); // altro metodo 
+
+        // Salvataggio del file
+        if ($request->hasFile('image')) {
+            $path = Storage::disk('public')->put('project_images', $request->image);
+            $data['image'] = $path;
+        }
+
+        // Salvataggio del progetto nel DB
+        $project = Project::create($data); // altro metodo al posto di fill e save, ciò richiede la variabile $fillable
 
         // Salvataggio dati nella tabella ponte
         if($request->has('technologies')) {
@@ -102,6 +112,18 @@ class ProjectController extends Controller
         // Aggionramento dei dati del progetto
         $data = $request->validated();
         $data['slug'] = Str::slug($data['title']);
+
+        if ($request->hasFile('image')) {
+
+            // Se presente, cancella l'immagine precedente
+            if($project->image) {
+                Storage::delete($project->image);
+            }
+
+            $path = Storage::disk('public')->put('project_images', $request->image);
+            $data['image'] = $path;
+        }
+
         $project->update($data);
 
         // Aggiornamento del collegamento con le technologies
@@ -123,6 +145,11 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
         $project->technologies()->detach(); // anche se cascade è stato impostato, sempre meglio aggiungere il detach()
+
+        if ($project->image) {
+            Storage::delete($project->image);
+        }
+
         $project->delete();
         return redirect()->route('admin.projects.index')->with('message', "{$project->title} è stato cancellato!");
     }

@@ -6,7 +6,7 @@
 
         @include('partials.errors')
 
-        <form action="{{ route('admin.projects.store') }}" method="POST">
+        <form action="{{ route('admin.projects.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
                 <label for="title" class="form-label">Titolo</label>
@@ -41,11 +41,22 @@
                 @endforeach
             </div>
 
-
             <div class="mb-3">
                 <label for="description" class="form-label">Descrizione</label>
                 <textarea class="form-control" id="description" rows="3" name="description">{{ old('description') }}</textarea>
             </div>
+
+            <div class="mb-3">
+                <label for="file" class="form-label">Immagine</label>
+                <input type="file" class="form-control @error('file') is-invalid @enderror" id="file" name="image"
+                    value="{{ old('file') }}">
+                @error('file')
+                    <div class="invalid-back text-danger">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
+
             <button class="btn btn-primary" type="submit">Invia</button>
         </form>
     </div>
