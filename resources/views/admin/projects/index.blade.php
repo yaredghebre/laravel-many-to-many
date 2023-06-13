@@ -9,16 +9,16 @@
     </div>
 
     {{-- Filtri --}}
-    <form action="{{ route('admin.projects.index') }}" method="GET" class="mx-2">
+    <form action="{{ route('admin.projects.index') }}" method="GET" class="mx-2 d-flex w-25 gap-2">
         @csrf
-        <label for="">Tipologia</label>
-        <select name="type_id" id="type">
+        <label for="" class="form-label">Tipologia</label>
+        <select name="type_id" id="type" class="form-select">
             <option value="">All</option>
             @foreach ($types as $type)
                 <option value="{{ $type->id }}">{{ $type->name }}</option>
             @endforeach
         </select>
-        <button type="submit">Filtra</button>
+        <button type="submit" class="btn btn-secondary">Filtra</button>
     </form>
 
     <table class="table">

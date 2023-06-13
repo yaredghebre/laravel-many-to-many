@@ -12,8 +12,8 @@
                     @if ($project->image)
                         <img width="300" src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}">
                     @else
-                        <div class="p-5 bg-secondary text-white">
-                            Image not available
+                        <div class="p-5 bg-secondary text-white w-50 text-center">
+                            <span> Image not available </span>
                         </div>
                     @endif
                 </div>

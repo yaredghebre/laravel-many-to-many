@@ -47,15 +47,20 @@
             </div>
 
             <div class="mb-3">
-                <label for="file" class="form-label">Immagine</label>
-                <input type="file" class="form-control @error('file') is-invalid @enderror" id="file" name="image"
-                    value="{{ old('file') }}">
+                <label for="image-input" class="form-label">Immagine</label>
+                <input type="file" class="form-control @error('file') is-invalid @enderror"  name="image"
+                    value="{{ old('file') }}" id="image-input">
                 @error('file')
                     <div class="invalid-back text-danger">
                         {{ $message }}
                     </div>
                 @enderror
+
+                <div class="my-3">
+                    <img src="" id="image-preview" class="d-none w-25" alt="">
+                </div>
             </div>
+
 
             <button class="btn btn-primary" type="submit">Invia</button>
         </form>
